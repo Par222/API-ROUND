@@ -4,18 +4,19 @@ import CandidateCard from "./CandidateCard"
 const AllCandidates=()=>{
 
     const [candidates,setCandidates]=useState([])
+    const [isLoading,setIsLoading]=useState(true)
     const fetchAll=async()=>{
      const result=await axios.get('https://run.mocky.io/v3/ae511409-8c0e-40ed-9336-aebcb602823d')
      setCandidates(result.data.data)
     }
 
     useEffect(()=>{
-        fetchAll()
+        fetchAll().then(()=>setIsLoading(false))
     },[])
    let status=['Applied','Accepted','Rejected']
   return(
     <div className="my-5 mx-[10%]">
-    <div className="grid grid-cols-3  ">
+    {!isLoading && <div className={`grid grid-cols-${status.length}`}>
        {
         status.map((status,i)=>{
             return(
@@ -37,6 +38,10 @@ const AllCandidates=()=>{
        }
 
     </div>
+}
+{isLoading && <div className="flex justify-center items-center h-[80vh]">
+    <p><img src="/loader1.svg"></img></p>
+    </div>}
 
     </div>)
   
